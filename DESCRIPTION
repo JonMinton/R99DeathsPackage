@@ -1,11 +1,13 @@
 Package: R99DeathsPackage
 Type: Package
-Title: What the Package Does (Title Case)
+Title: R99 Deaths Package
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Author: Jon Minotn
+Maintainer: Jon Minton <jon.will.minton@gmail.com>
+Description: Package of functions to perform analyses of unexplained deaths in England
+    Further details go herer
+License: GNU GENERAL PUBLIC LICENSE
 Encoding: UTF-8
 LazyData: true
+Imports: 
+    readxl
