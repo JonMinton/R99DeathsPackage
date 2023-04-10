@@ -8,6 +8,12 @@ library(tidyverse)
 library(janitor)
 
 
+#' Check for and if necessary make a data-processed directory
+#'
+#' @return
+#' @export
+#'
+#' @examples
 check_make_dir = function() {
 
   if (dir.exists(here::here("data-processed"))){
@@ -21,6 +27,12 @@ check_make_dir = function() {
 }
 
 
+#' Title
+#'
+#' @return
+#' @export
+#'
+#' @examples
 process_population_files = function() {
   #################################POPULATION ####################################
 
@@ -33,7 +45,7 @@ process_population_files = function() {
 
   pop_years <- readxl::read_excel(here::here('downloaded-files/population/ukpopulationestimates18382020.xlsx'),
                                   sheet = 'Table 9', range = 'A5:BI5') %>% names() %>%
-    str_remove('Mid-')
+    stringr::str_remove('Mid-')
 
   dta_mf <- readxl::read_excel(here::here('downloaded-files/population/ukpopulationestimates18382020.xlsx'),
                        sheet = 'Table 9', range = 'A7:BI98', na = ':', col_names = pop_years) %>%
@@ -81,12 +93,18 @@ process_population_files = function() {
   dta_pop_long %>%
     dplyr::filter(age != 'All Ages') %>%
     dplyr::select(age, year, sex, pop_count = value) %>%
-    dplyr::mutate(age = str_remove(age, '\\+') %>% as.numeric() ) %>%
+    dplyr::mutate(age = stringr::str_remove(age, '\\+') %>% as.numeric() ) %>%
     readr::write_rds(file = here::here('data-processed/pop_individual_ages.rds'))
 
   return( TRUE )
 }
 
+#' Process causes of death file for ICD10
+#'
+#' @return
+#' @export
+#'
+#' @examples
 process_cause_of_deaths_files = function() {
   ### ONS cause of death
 
@@ -101,7 +119,7 @@ process_cause_of_deaths_files = function() {
   #    - I will read in cells up to row 24000, then delete empty rows
 
   read_and_clean <- function(sht){
-    readxl::read_xlsx(here::here("downloaded-files", "ons_cod.xlsx"),
+    readxl::read_xlsx(here::here("downloaded-files", "deaths-cause", "21stcmortality.xlsx"),
                       sheet = sht,
                       range = "A5:E24000") %>%
       janitor::clean_names()
@@ -129,30 +147,36 @@ process_cause_of_deaths_files = function() {
   return ( TRUE )
 }
 
-process_weekly_deaths_files = function () {
-  # # deaths at home - weekly
-  #
-  # weekly_deaths_at_home <- readxl::read_excel(
-  #   path = here("downloaded-files", "deaths-weekly", "publicationfileweek522022.xlsx"),
-  #   sheet = "10", range = "A6:Q58"
-  # ) %>% clean_names() %>%
-  #   pivot_longer(
-  #     cols = -week_number,
-  #     names_to = "category", values_to = "count"
-  #     ) %>%
-  #   mutate(
-  #     year = 2022
-  #   ) %>%
-  #   select(year, week_number, category, count)
-  #
-  # # save it
-  #
-  # weekly_deaths_at_home %>%
-  #   write_rds(file = here("data-processed", "weekly_deaths_at_home_2022.rds"))
-  #
-
-  return ( TRUE )
-}
+#' Title
+#'
+#' @return
+#' @export
+#'
+#' @examples
+# process_weekly_deaths_files = function () {
+#   # # deaths at home - weekly
+#   #
+#   # weekly_deaths_at_home <- readxl::read_excel(
+#   #   path = here("downloaded-files", "deaths-weekly", "publicationfileweek522022.xlsx"),
+#   #   sheet = "10", range = "A6:Q58"
+#   # ) %>% clean_names() %>%
+#   #   pivot_longer(
+#   #     cols = -week_number,
+#   #     names_to = "category", values_to = "count"
+#   #     ) %>%
+#   #   mutate(
+#   #     year = 2022
+#   #   ) %>%
+#   #   select(year, week_number, category, count)
+#   #
+#   # # save it
+#   #
+#   # weekly_deaths_at_home %>%
+#   #   write_rds(file = here("data-processed", "weekly_deaths_at_home_2022.rds"))
+#   #
+#
+#   return ( TRUE )
+# }
 
 
 #' Process downloaded files
@@ -234,7 +258,7 @@ process_downloaded_files = function() {
   find_load_and_bind_sheets_in_wb <- function(loc){
 
     relevant_sheet_mtrx <- readxl::excel_sheets(loc) %>%
-      str_match("(icd\\d)_(\\d*)")
+      stringr::str_match("(icd\\d)_(\\d*)")
 
     relevant_sheets <- relevant_sheet_mtrx[,1]
     relevant_sheets <- relevant_sheets[!is.na(relevant_sheets)]
@@ -269,7 +293,7 @@ process_downloaded_files = function() {
     ) %>%
     dplyr::bind_rows() %>%
     dplyr::mutate(
-      code = coalesce(ICD_7, ICD_8, ICD_9)
+      code = dplyr::coalesce(ICD_7, ICD_8, ICD_9)
     ) %>%
     dplyr::select(icd_version, code, sex, yr, age, ndths) %>%
     dplyr::mutate(
@@ -453,14 +477,14 @@ process_downloaded_files = function() {
 
   dta_pop_2001_plus <- readr::read_csv('downloaded-files/population/MYEB2_detailed_components_of_change_for reconciliation_EW_(2021_geog21).csv')
 
-  dta_pop_2001_plus %>%
-    dplyr::mutate(
-      sex = dplyr::case_when(
-        sex == 1 ~ 'female',
-        sex == 2 ~ 'male',
-        TRUE ~ NA_character_
-      )
-    ) %>% view()
+  # dta_pop_2001_plus %>%
+  #   dplyr::mutate(
+  #     sex = dplyr::case_when(
+  #       sex == 1 ~ 'female',
+  #       sex == 2 ~ 'male',
+  #       TRUE ~ NA_character_
+  #     )
+  #   ) %>% view()
   dplyr::filter(country == 'E') %>%
     tidyr::pivot_longer(
       population_2001:other_adjust_2021,

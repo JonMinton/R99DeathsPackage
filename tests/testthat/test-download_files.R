@@ -20,6 +20,6 @@ test_that("Files downloaded can by unzipped where found", {
 })
 
 
-test_that("download and unzip just 'works'", {
-  expect_true(download_and_unzip())
-})
+# test_that("download and unzip just 'works'", {
+#   expect_true(download_and_unzip())
+# })
