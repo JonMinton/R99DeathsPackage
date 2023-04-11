@@ -12,14 +12,31 @@ test_that("can check for data-processed directory", {
   # actual = ("data-processed" %in% base_loc)
   # expect_true(actual)
 })
-
+#
 test_that("population files are processed", {
   actual = process_population_files()
   expect_true(actual)
+  expect_true(
+    file.exists(here::here('data-processed/pop_all_ages.rds'))
+  )
+
+  expect_true(
+    file.exists(here::here('data-processed/pop_individual_ages.rds'))
+  )
+
+})
+#
+test_that("cause of death files for ICD10 are processed", {
+  actual = process_cause_of_deaths_files()
+  expect_true(actual)
+
+  expect_true(
+    file.exists(here::here("data-processed", "cod_long.rds"))
+  )
 
 })
 
-test_that("cause of death files are processed", {
-  actual = process_cause_of_deaths_files()
+test_that("process_weekly_deaths returns TRUE (even though it doesn't do anything yet", {
+  actual = process_weekly_deaths_files()
   expect_true(actual)
 })

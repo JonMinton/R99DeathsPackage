@@ -147,36 +147,37 @@ process_cause_of_deaths_files = function() {
   return ( TRUE )
 }
 
-#' Title
+#' Process weekly deaths files
 #'
+#' Not currently used
 #' @return
 #' @export
 #'
 #' @examples
-# process_weekly_deaths_files = function () {
-#   # # deaths at home - weekly
-#   #
-#   # weekly_deaths_at_home <- readxl::read_excel(
-#   #   path = here("downloaded-files", "deaths-weekly", "publicationfileweek522022.xlsx"),
-#   #   sheet = "10", range = "A6:Q58"
-#   # ) %>% clean_names() %>%
-#   #   pivot_longer(
-#   #     cols = -week_number,
-#   #     names_to = "category", values_to = "count"
-#   #     ) %>%
-#   #   mutate(
-#   #     year = 2022
-#   #   ) %>%
-#   #   select(year, week_number, category, count)
-#   #
-#   # # save it
-#   #
-#   # weekly_deaths_at_home %>%
-#   #   write_rds(file = here("data-processed", "weekly_deaths_at_home_2022.rds"))
-#   #
-#
-#   return ( TRUE )
-# }
+process_weekly_deaths_files = function () {
+  # # deaths at home - weekly
+  #
+  # weekly_deaths_at_home <- readxl::read_excel(
+  #   path = here("downloaded-files", "deaths-weekly", "publicationfileweek522022.xlsx"),
+  #   sheet = "10", range = "A6:Q58"
+  # ) %>% clean_names() %>%
+  #   pivot_longer(
+  #     cols = -week_number,
+  #     names_to = "category", values_to = "count"
+  #     ) %>%
+  #   mutate(
+  #     year = 2022
+  #   ) %>%
+  #   select(year, week_number, category, count)
+  #
+  # # save it
+  #
+  # weekly_deaths_at_home %>%
+  #   write_rds(file = here("data-processed", "weekly_deaths_at_home_2022.rds"))
+  #
+
+  return ( TRUE )
+}
 
 
 #' Process downloaded files
